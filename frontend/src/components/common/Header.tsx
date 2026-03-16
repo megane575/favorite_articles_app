@@ -1,4 +1,3 @@
-//Article App        Home  MyPage  New Article  Login という ナビゲーションバー
 import Link from "next/link";
 
 export default function Header() {
