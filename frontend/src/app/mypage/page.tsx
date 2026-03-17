@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Button from "@/components/common/Button";
+import { useEffect } from "react";
 
+//認証状態管理（token確認）
 export default function MyPage() {
+    useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("token:", token);
+  }, []);
+
   return (
     <main className="p-6 space-y-6">
       <section className="flex items-center justify-between">
