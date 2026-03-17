@@ -97,6 +97,10 @@ export default function MyPage() {
             </div>
           </article>
         ))}
+
+        <Link href="/">
+          <Button>ホームへ戻る</Button>
+        </Link>
       </section>
     </main>
   );
