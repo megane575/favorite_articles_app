@@ -1,23 +1,39 @@
-from fastapi import FastAPI
-from passlib.context import CryptContext  # 1. 追加
+from fastapi import FastAPI, HTTPException, status
+from passlib.context import CryptContext 
+from pydantic import BaseModel
 
-# FastAPIの本体を作成
+# --- 設定と準備 ---
+
 app = FastAPI(title="記事共有アプリ API")
 
-# 2. パスワードをハッシュ化するための設定（app作成のすぐ下あたりがおすすめ）
+# パスワードハッシュ化の設定
 pwd_context = CryptContext(
     schemes=["bcrypt"], 
     deprecated="auto",
-    bcrypt__ident="2b"  # これを明示的に指定するとエラーが消えることが多いです
+    bcrypt__ident="2b"
 )
 
+# ユーザーが送ってくるデータの形（型定義）
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+# --- 共通関数 ---
+
 def get_password_hash(password):
-    """生のパスワードを暗号化された文字列に変える関数"""
+    """生のパスワードをハッシュ化する"""
     return pwd_context.hash(password)
 
-# --- ここから下の既存のコードはそのままでOK ---
+def verify_password(plain_password, hashed_password):
+    """パスワードが合っているか確認する"""
+    return pwd_context.verify(plain_password, hashed_password)
 
-# 1. 記事一覧取得の窓口
+# --- エンドポイント（窓口） ---
+
+@app.get("/")
+def read_root():
+    return {"message": "APIは正常に起動しています！ /docs にアクセスしてね"}
+
 @app.get("/posts")
 def get_posts():
     return [
@@ -25,16 +41,16 @@ def get_posts():
         {"id": 2, "url": "https://fastapi.tiangolo.com", "description": "FastAPIの公式サイト"}
     ]
 
-# 2. 正常起動の確認用
-@app.get("/")
-def read_root():
-    return {"message": "APIは正常に起動しています！ /docs にアクセスしてね"}
+@app.post("/login")
+def login(request: LoginRequest):
+    # 【テスト用】昨日の実行結果（$2b$12$...）をここに貼り付け
+    dummy_hashed_password = "$2b$12$y2voiZNmujG/8TPD99vawerDaID7dbl/Ckt.f6RBA9o3Hp4S6oFqG" 
 
-# 3. 【実験用】パスワードが暗号化されるか確認する窓口
-@app.get("/test-hash")
-def test_hash(p: str):
-    hashed = get_password_hash(p)
-    return {
-        "original": p,
-        "hashed": hashed
-    }
+    # パスワード照合
+    if not verify_password(request.password, dummy_hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="パスワードが違います"
+        )
+
+    return {"message": "ログイン成功！", "token": "fake-jwt-token"}
