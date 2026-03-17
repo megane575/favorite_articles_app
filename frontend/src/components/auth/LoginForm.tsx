@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+//成功時に token を localStorage に保存して /mypage に遷移
+import { useRouter } from "next/navigation"
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  //JWT保存処理実装
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
@@ -36,6 +40,10 @@ export default function LoginForm() {
     }
 
     console.log("login success:", data);
+
+    //JWT保存処理実装
+    localStorage.setItem("token", data.token);
+    router.push("/mypage");
 
   } catch (error) {
     console.error(error);
