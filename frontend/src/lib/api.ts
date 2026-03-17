@@ -1,9 +1,9 @@
-// lib/api.ts
+// API関数ここにまとめるページ
 
 const BASE_URL = "http://localhost:8000";
 
-export async function getMyArticles(token: string) {
-  const res = await fetch(`${BASE_URL}/articles/me`, {
+export async function getPosts(token: string) {
+  const res = await fetch(`${BASE_URL}/posts`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
