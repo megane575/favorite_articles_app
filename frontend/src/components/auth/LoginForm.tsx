@@ -13,7 +13,59 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+
+  console.log("① submit開始");
+
   setErrorMessage("");
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  console.log("① submit開始");
+  setErrorMessage("");
+
+  if (!email || !password) {
+    console.log("② 未入力でreturn");
+    setErrorMessage("メールアドレスとパスワードを入力してください。");
+    return;
+  }
+
+  try {
+    console.log("③ fetch前", { email, password });
+
+    const response = await fetch("http://localhost:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+
+    console.log("④ response受け取り", response.status, response.ok);
+
+    const data = await response.json();
+    console.log("⑤ json受け取り", data);
+
+    if (!response.ok) {
+      console.log("⑥ response.ok が false");
+      setErrorMessage(data.detail || "ログインに失敗しました");
+      return;
+    }
+
+    console.log("⑦ success分岐に入った");
+    localStorage.setItem("token", data.token);
+    console.log("⑧ token保存後", localStorage.getItem("token"));
+
+    router.push("/mypage");
+    console.log("⑨ push後");
+
+  } catch (error) {
+    console.error("⑩ catchに入った", error);
+    setErrorMessage("通信エラーが発生しました");
+  }
+};
 
   if (!email || !password) {
     setErrorMessage("メールアドレスとパスワードを入力してください。");
@@ -33,6 +85,9 @@ export default function LoginForm() {
     });
 
     const data = await response.json();
+    console.log("status:", response.status);
+    console.log("data:", data);
+
 
     if (!response.ok) {
       setErrorMessage(data.detail || "ログインに失敗しました");

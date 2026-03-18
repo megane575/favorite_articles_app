@@ -1,12 +1,14 @@
 "use client";
 
+import { ROUTES } from "@/constants/routes";
+
 import Link from "next/link";
 import Button from "@/components/common/Button";
 import { useEffect, useState } from "react";
 //ログアウト処理
 import { useRouter } from "next/navigation";
-import { getPosts } from "@/lib/api";
-import { Post } from "@/types/article";
+//import { getPosts } from "@/lib/api";
+//import { Post } from "@/types/article";
 
 // 認証状態確認（仮）
 // ログイン成功時に保存された JWT(token) を確認
@@ -61,8 +63,12 @@ export default function MyPage() {
   // localStorage から token を削除してログイン画面へ戻す
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    //router.push("/login");
+
+    // routes.ts を使用
+    router.push(ROUTES.login);
   };
+
 
   return (
     <main className="p-6 space-y-6">
@@ -70,10 +76,19 @@ export default function MyPage() {
         <h1 className="text-2xl font-bold">mypage</h1>
 
         <div className="flex gap-3">
-          <Link href="/articles/new">
+
+          {/*<Link href={ROUTES.top}>
+            <Button>トップへ戻る</Button>
+          </Link>*/}
+
+          {/* URLを直接指定の書き方 */}
+          {/* <Link href="/articles/new"> */}
+
+          {/* routes.ts を使用した書き方 */}
+          <Link href={ROUTES.newArticle}>
             <Button>記事登録</Button>
           </Link>
-
+         
           <button
             onClick={handleLogout}
             className="px-4 py-2 rounded bg-gray-600 text-white hover:opacity-90"
