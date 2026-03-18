@@ -13,3 +13,11 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+# DB接続を自動で閉じたり開いたりする便利な関数
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
