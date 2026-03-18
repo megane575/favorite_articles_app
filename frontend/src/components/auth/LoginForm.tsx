@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { loginApi } from "../../app/login/api-login";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // JWT保存処理実装
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,39 +23,26 @@ export default function LoginForm() {
     }
 
     try {
-      console.log("③ fetch前", { email, password });
+      console.log("③ loginApi実行前", { email, password });
 
-      const response = await fetch("http://localhost:8000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const data = await loginApi({ email, password });//UIと認証処理担当
 
-      console.log("④ response受け取り", response.status, response.ok);
+      console.log("④ loginApi結果", data);
 
-      const data = await response.json();
-      console.log("⑤ json受け取り", data);
+      console.log("⑤ success分岐に入った");
+      localStorage.setItem("token", data.access_token); // JWT保存
+      console.log("⑥ token保存後", localStorage.getItem("token"));
 
-      if (!response.ok) {
-        console.log("⑥ response.ok が false");
-        setErrorMessage(data.detail || "メールアドレスとパスワードが違います");
-        return;
-      }
-
-      console.log("⑦ success分岐に入った");
-      localStorage.setItem("token", data.token);
-      console.log("⑧ token保存後", localStorage.getItem("token"));
-
-      router.push("/mypage");
-      console.log("⑨ push後");
+      router.push("/mypage");//UIと認証処理担当
+      console.log("⑦ push後");
     } catch (error) {
-      console.error("⑩ catchに入った", error);
-      setErrorMessage("通信エラーが発生しました");
+      console.error("⑧ catchに入った", error);
+
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("通信エラーが発生しました");
+      }
     }
   };
 
