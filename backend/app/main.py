@@ -1,12 +1,35 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import  text
 import os
 from fastapi import FastAPI, HTTPException, status
 from passlib.context import CryptContext 
 from pydantic import BaseModel
 
+# DB接続用ライブラリ
+import time
+from sqlalchemy.exc import OperationalError
+from db import engine
+from models import Base
+from seed import run_seed
+
+
 # --- 設定と準備 ---
 
 app = FastAPI(title="記事共有アプリ API")
+
+# DBテーブル作成（起動時）
+@app.on_event("startup")
+def startup():
+    for i in range(10):
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("DB 接続されました！！")
+
+            run_seed()
+            
+            break
+        except OperationalError:
+            print("DB 接続中...")
+            time.sleep(2)
 
 # パスワードハッシュ化の設定
 pwd_context = CryptContext(
@@ -35,14 +58,10 @@ def verify_password(plain_password, hashed_password):
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 @app.get("/")
+# DB接続確認用
 def root():
-    try:
-        engine = create_engine(DATABASE_URL)
-        with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        return {"message": "DB connected"}
-    except Exception as e:
-        return {"error": str(e)}
+    return{"message":"API running"}
+
 def read_root():
     return {"message": "APIは正常に起動しています！ /docs にアクセスしてね"}
 
