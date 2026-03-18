@@ -46,27 +46,27 @@ export default function MyPage() {
 
   // かみえりさんのコード↓
   //ログアウト処理
-  const router = useRouter();
+  // const router = useRouter();
 
   // 一旦ダミーデータで表示のためコメントアウト
   // const [posts, setPosts] = useState<Post[]>([]);
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      url: "https://example.com",
-      description: "Reactの勉強にめっちゃ良かった記事",
-      username: "tanaka",
-      created_at: "2024-01-01",
-    },
-    {
-      id: 2,
-      url: "https://nextjs.org",
-      description: "Next.js公式ドキュメント",
-      username: "sato",
-      created_at: "2024-01-02",
-    },
-  ]);
-  // ここまで↑
+  // const [posts, setPosts] = useState([
+  //   {
+  //     id: 1,
+  //     url: "https://example.com",
+  //     description: "Reactの勉強にめっちゃ良かった記事",
+  //     username: "tanaka",
+  //     created_at: "2024-01-01",
+  //   },
+  //   {
+  //     id: 2,
+  //     url: "https://nextjs.org",
+  //     description: "Next.js公式ドキュメント",
+  //     username: "sato",
+  //     created_at: "2024-01-02",
+  //   },
+  // ]);
+  // // ここまで↑
 
   // 一旦ダミーデータで表示のためコメントアウト
   // useEffect(() => {
@@ -150,10 +150,6 @@ export default function MyPage() {
             </div>
           </article>
         ))}
-
-        <Link href="/">
-          <Button>ホームへ戻る</Button>
-        </Link>
       </section>
     </main>
   );
