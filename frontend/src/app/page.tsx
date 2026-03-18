@@ -1,12 +1,13 @@
-"use client"; 
+"use client";
 
+import ArticleCard from "@/components/common/ArticleCard";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import ArticleCard from "@/components/common/ArticleCard";
 
 interface Article {
   id: number;
   user_id: string;
+  user_name?: string;
   created_at: string;
   memo: string;
   url: string;
@@ -32,20 +33,16 @@ export default function HomePage() {
     };
 
     fetchArticles();
+
   }, []);
 
   return (
     <main className="p-6 space-y-6">
-      <section className="space-y-2">
-        <h1 className="text-2xl font-bold">お気に入り記事紹介サイト</h1>
-        <p>誰でも見られるトップページです。</p>
+    
 
-        <Link href="/login" className="text-blue-600 underline">
-          ログインへ
-        </Link>
-      </section>
-
+      {/* 投稿一覧 */}
       <section className="space-y-4">
+
         {loading ? (
           <p>データを読み込み中...</p>
         ) : articles.length > 0 ? (
@@ -67,6 +64,7 @@ export default function HomePage() {
         ) : (
           <p>記事がまだありません。</p>
         )}
+
       </section>
     </main>
   );
