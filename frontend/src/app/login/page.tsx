@@ -1,8 +1,12 @@
+import LoginForm from "@/components/auth/LoginForm";
+
 export default function LoginPage() {
   return (
-    <main>
-        <h1>ログインページ</h1>
-        <p>ログイン機能は後で追加します。</p>
+    <main className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center mb-6">ログイン</h1>
+        <LoginForm />
+      </div>
     </main>
   );
 }
