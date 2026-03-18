@@ -16,7 +16,7 @@
     {
       "id": 1,
       "url": "[https://example.com](https://example.com)",
-      "description": "この記事は参考になります！",
+      "memo": "この記事は参考になります！",
       "username": "tanaka",
       "created_at": "2024-05-20T10:00:00"
     }
@@ -31,7 +31,7 @@ URLとおすすめ理由を投稿します（要ログイン）。
   [
     {
       "url": "[https://example.com](https://example.com)",
-      "description": "おすすめの理由"
+      "memo": "おすすめの理由"
     }
   ]
 

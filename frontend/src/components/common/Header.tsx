@@ -5,7 +5,7 @@ export default function Header() {
     <header className="w-full border-b p-4 bg-white">
       <div className="max-w-5xl mx-auto flex justify-between items-center">
         <h1 className="text-xl font-bold">
-          <Link href="/">Article App</Link>
+          <Link href="/">お気に入り記事共有アプリ</Link>
         </h1>
 
         <nav className="flex gap-4">
