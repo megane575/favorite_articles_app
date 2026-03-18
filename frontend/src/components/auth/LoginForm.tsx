@@ -8,8 +8,7 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // JWT保存処理実装
-  const router = useRouter();
+  const router = useRouter(); // JWT保存処理実装
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,6 +54,7 @@ export default function LoginForm() {
         <input
           id="email"
           type="email"
+          autoComplete="off"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full border rounded-lg px-3 py-2"
