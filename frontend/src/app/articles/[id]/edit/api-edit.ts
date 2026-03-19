@@ -1,36 +1,23 @@
 const BASE_URL = "http://localhost:8000";
+
+// 投稿詳細取得
 export async function getPost(id: number, token: string) {
-  const res = await fetch(`http://localhost:8000/posts/${id}`, {
+  const res = await fetch(`${BASE_URL}/posts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  console.log("status:", res.status);
+  console.log("getPost status:", res.status);
 
   if (!res.ok) {
     const text = await res.text();
-    console.error(text);
+    console.error("getPost error:", text);
     throw new Error("投稿取得失敗");
   }
 
   return res.json();
 }
-
-// 投稿詳細取得
-// export async function getPost(id: number, token: string) {
-//   const res = await fetch(`${BASE_URL}/post/${id}`, {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("投稿取得失敗");
-//   }
-
-//   return res.json();
-// }
 
 // 投稿更新
 export async function updatePost(
@@ -39,7 +26,7 @@ export async function updatePost(
   memo: string,
   token: string,
 ) {
-  const res = await fetch(`${BASE_URL}/post/${id}`, {
+  const res = await fetch(`${BASE_URL}/posts/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +38,11 @@ export async function updatePost(
     }),
   });
 
+  console.log("updatePost status:", res.status);
+
   if (!res.ok) {
+    const text = await res.text();
+    console.error("updatePost error:", text);
     throw new Error("更新失敗");
   }
 
