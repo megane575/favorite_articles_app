@@ -32,7 +32,7 @@ app = FastAPI(title="記事共有アプリ API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 本番はURLを指定しますが、開発中は "*" で全て許可
+    allow_origins=["http://localhost:3000"], # 本番はURLを指定しますが、開発中は "*" で全て許可
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

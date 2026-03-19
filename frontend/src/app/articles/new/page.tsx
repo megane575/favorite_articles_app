@@ -3,33 +3,36 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
-import { getPosts, savePosts } from "@/lib/mockPosts";
+import { createPost } from "./api-new";
 
 export default function NewArticlePage() {
   const router = useRouter();
 
-  const [userId, setUserId] = useState("");
   const [url, setUrl] = useState("");
   const [memo, setMemo] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!url || !memo) {
       alert("入力してください");
       return;
     }
 
-    const newPost = {
-      id: Date.now(),
-      user_id: Number(userId), // 実際のアプリケーションでは、現在のユーザーIDに置き換える
-      url,
-      memo,
-      created_at: new Date().toISOString(),
-    };
+    const token = localStorage.getItem("token");
+    console.log("TOKEN", token);
 
-    const posts = getPosts();
-    savePosts([...posts, newPost]);
+    if (!token) {
+      alert("ログインしてください");
+      router.push("/login");
+      return;
+    }
 
-    router.push("/mypage");
+    try {
+      await createPost(token, { url, memo });
+      router.push("/mypage");
+    } catch (error) {
+      console.error(error);
+      alert("投稿失敗");
+    }
   };
 
   return (
@@ -37,14 +40,6 @@ export default function NewArticlePage() {
       <h1 className="text-2xl font-bold">記事投稿</h1>
 
       <div className="space-y-4">
-        <input
-          type="number"
-          placeholder="User ID"
-          className="w-full border p-2 rounded"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        />
-
         <textarea
           placeholder="おすすめ理由"
           className="w-full border p-2 rounded"
