@@ -1,7 +1,5 @@
 "use client";
 
-// import { ROUTES } from "@/constants/routes";
-
 import Link from "next/link";
 import Button from "@/components/common/Button";
 import { useEffect, useState } from "react";
@@ -10,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { Post } from "@/types/article";
 
 export default function MyPage() {
-  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const router = useRouter();
 
@@ -71,10 +68,7 @@ export default function MyPage() {
         <h1 className="text-2xl font-bold">mypage</h1>
 
         <div className="flex gap-3">
-          {/* URLを直接指定の書き方 */}
           <Link href="/articles/new">
-            {/* routes.ts を使用した書き方
-            <Link href={ROUTES.newArticle}> */}
             <Button>記事登録</Button>
           </Link>
 
