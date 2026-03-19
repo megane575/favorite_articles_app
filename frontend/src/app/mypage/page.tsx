@@ -5,39 +5,15 @@
 import Link from "next/link";
 import Button from "@/components/common/Button";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import { getPosts, savePosts } from "@/lib/mockPosts";
-import { Post } from "@/types/article";
-import { useRouter } from "next/navigation";
-=======
 import { getMyPosts, deletePost } from "./api-mypage";
 import { useRouter } from "next/navigation";
 import { Post } from "@/types/article";
->>>>>>> develop
 
 export default function MyPage() {
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const router = useRouter();
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("token:", token);
-
-    const data = getPosts();
-    setPosts(data);
-  }, []);
-
-  const handleDelete = (id: number) => {
-    const newPosts = posts.filter((p) => p.id !== id);
-    savePosts(newPosts);
-    setPosts(newPosts);
-  };
-
-  // ログアウト処理
-  // localStorage から token を削除してログイン画面へ戻す
-=======
   // 投稿取得
   const fetchPosts = async (token: string) => {
     try {
@@ -84,7 +60,6 @@ export default function MyPage() {
   };
 
   // ログアウト
->>>>>>> develop
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");
