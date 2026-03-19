@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { loginApi } from "../../app/login/api-login";
 //成功時に token を localStorage に保存して /mypage に遷移
 import { useRouter } from "next/navigation";
 
@@ -8,49 +9,43 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  //JWT保存処理実装
-  const router = useRouter();
+  const router = useRouter(); // JWT保存処理実装
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //console.log("① submit開始");
     setErrorMessage("");
 
     if (!email || !password) {
+      //console.log("② 未入力でreturn");
       setErrorMessage("メールアドレスとパスワードを入力してください。");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      //console.log("③ loginApi実行前", { email, password });
 
-      const data = await response.json();
+      const data = await loginApi({ email, password });//UIと認証処理担当
 
-      if (!response.ok) {
-        setErrorMessage(data.detail || "ログインに失敗しました");
-        return;
-      }
+      //console.log("④ loginApi結果", data);
 
-      console.log("login success:", data);
+      //console.log("⑤ success分岐に入った");
+      localStorage.setItem("token", data.access_token); // JWT保存
+      //console.log("⑥ token保存後", localStorage.getItem("token"));
 
-      //JWT保存処理実装
-      localStorage.setItem("token", data.access_token);
-      router.push("/mypage");
+      router.push("/mypage");//UIと認証処理担当
+      //console.log("⑦ push後");
     } catch (error) {
-      console.error(error);
-      setErrorMessage("通信エラーが発生しました");
+      //console.error("⑧ catchに入った", error);
+
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("通信エラーが発生しました");
+      }
     }
   };
 
-  //UI
   return (
     <form
       onSubmit={handleSubmit}
@@ -62,7 +57,11 @@ export default function LoginForm() {
         </label>
         <input
           id="email"
+          name="nope-email"
           type="email"
+          autoComplete="new-password"
+          readOnly
+          onFocus={(e) => e.currentTarget.removeAttribute("readonly")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full border rounded-lg px-3 py-2"
@@ -76,7 +75,11 @@ export default function LoginForm() {
         </label>
         <input
           id="password"
+          name="nope-password"
           type="password"
+          autoComplete="new-password"
+          readOnly
+          onFocus={(e) => e.currentTarget.removeAttribute("readonly")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full border rounded-lg px-3 py-2"
