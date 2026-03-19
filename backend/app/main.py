@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from jose import jwt
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
+from sqlalchemy.orm import joinedload
 
 # 秘密鍵（何でも良い）
 SECRET_KEY = "your-secret-key-share-with-partner"
@@ -121,9 +122,21 @@ def root():
 # 1. 記事一覧を取得する (Read)
 @app.get("/posts")
 def get_posts(db: Session = Depends(get_db)):
-    # SQL: SELECT * FROM articles; を実行するのと同じ意味
-    articles = db.query(models.Article).all()
-    return articles
+    # Articleを取得する際、一緒にUser情報もセットで取ってくる（JOIN）
+    articles = db.query(models.Article).options(joinedload(models.Article.user)).all()
+    
+    # フロントエンドが使いやすい形に整理して返す
+    return [
+        {
+            "id": a.id,
+            "url": a.url,
+            "memo": a.memo,
+            "created_at": a.created_at.isoformat(),
+            "user_id": a.user_id,
+            "user_name": a.user.name 
+        }
+        for a in articles
+    ]
 
 # 1-2. 特定の記事を1つだけ取得する (ガードマン付き)
 @app.get("/posts/{post_id}")
@@ -150,11 +163,23 @@ def get_my_posts(
     db: Session = Depends(get_db), 
     current_user_id: int = Depends(get_current_user)
 ):
-    # ログインしている自分の ID に一致する記事だけを返す
-    articles = db.query(models.Article).filter(
+    # joinedloadを追加してユーザー情報を一緒に取る
+    articles = db.query(models.Article).options(joinedload(models.Article.user)).filter(
         models.Article.user_id == current_user_id
     ).all()
-    return articles
+    
+    # フロントエンドが使いやすい形（辞書のリスト）にして返す
+    return [
+        {
+            "id": a.id,
+            "url": a.url,
+            "memo": a.memo,
+            "created_at": a.created_at.isoformat(),
+            "user_id": a.user_id,
+            "user_name": a.user.name # これでマイページでも名前が出る！
+        }
+        for a in articles
+    ]
 
 # 2. 記事を新しく投稿する (ガードマン設置版)
 @app.post("/posts")

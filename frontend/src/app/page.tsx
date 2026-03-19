@@ -7,7 +7,7 @@ import Link from "next/link";
 interface Article {
   id: number;
   user_id: string;
-  user_name?: string;
+  user_name: string;
   created_at: string;
   memo: string;
   url: string;
@@ -37,10 +37,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="p-6 bg-[#f0f9ff] min-h-screen"> {/* 全体の背景を薄い水色にするとミニオン風が際立ちます */}
+    <main className="p-6 bg-[#f0f9ff] min-h-screen"> 
       
-
-      {/* 修正ポイント：ここをグリッドにします */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
         {loading ? (
@@ -52,7 +50,7 @@ export default function HomePage() {
             return (
               <ArticleCard
                 key={article.id}
-                author={article.user_name || `ユーザー(${article.user_id})`}
+                author={article.user_name || `ユーザー(ID:${article.user_id})` || "ゲスト"}
                 date={dateOnly}
                 reason={article.memo}
                 url={article.url}

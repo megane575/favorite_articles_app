@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from db import Base
 
 class User(Base):
@@ -10,6 +11,8 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
 
+    articles = relationship("Article", back_populates="user")
+
 class Article(Base):
     __tablename__ = "articles"
 
@@ -18,3 +21,5 @@ class Article(Base):
     url = Column(Text, nullable=False)
     memo = Column(Text) 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    user = relationship("User", back_populates="articles")
