@@ -20,7 +20,7 @@ export default function ArticleCard({
       <div className="flex items-center gap-2">
         {/* 投稿者のアイコン風の丸 */}
         <div className="w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center text-xs">
-          👤
+          🌵
         </div>
         <span className="font-bold text-gray-700 text-sm">
           {author}
@@ -41,7 +41,7 @@ export default function ArticleCard({
   </p>
 </div>
 
-    {/* フッター：控えめだけど可愛いリンク */}
+    {/* フッター */}
     <a 
     href={url} 
     target="_blank"

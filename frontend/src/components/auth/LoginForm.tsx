@@ -51,10 +51,13 @@ export default function LoginForm() {
       onSubmit={handleSubmit}
       className="bg-white shadow-md rounded-xl p-6 space-y-4"
     >
+
+    <div className="space-y-6">
+
       <div>
-        <label htmlFor="email" className="block text-sm font-medium mb-1">
-          メールアドレス
-        </label>
+        <label htmlFor="email" className="block text-xs font-black text-slate-600 mb-2 ml-1 tracking-widest uppercase">
+      メールアドレス
+    </label>
         <input
           id="email"
           name="nope-email"
@@ -64,15 +67,15 @@ export default function LoginForm() {
           onFocus={(e) => e.currentTarget.removeAttribute("readonly")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2"
-          placeholder="example@email.com"
+          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent transition-all placeholder:text-slate-300"
+      placeholder="example@email.com"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium mb-1">
-          パスワード
-        </label>
+        <label htmlFor="password" className="block text-xs font-black text-slate-600 mb-2 ml-1 tracking-widest uppercase">
+      パスワード
+    </label>
         <input
           id="password"
           name="nope-password"
@@ -82,16 +85,18 @@ export default function LoginForm() {
           onFocus={(e) => e.currentTarget.removeAttribute("readonly")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2"
-          placeholder="パスワードを入力"
+          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-transparent transition-all placeholder:text-slate-300"
+      placeholder="••••••••"
         />
       </div>
+
+    </div>
 
       {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:opacity-90"
+        className="w-full px-6 py-3 bg-[#FFD700] hover:bg-[#FACC15] text-slate-800 text-sm font-black rounded-full shadow-[0_4px_0_0_#EAB308] active:shadow-none active:translate-y-[2px] transition-all tracking-widest uppercase mt-4"
       >
         ログイン
       </button>
