@@ -3,95 +3,60 @@
 import Link from "next/link";
 import Button from "@/components/common/Button";
 import { useEffect, useState } from "react";
-import { getPosts, savePosts, Post } from "@/lib/mockPosts";
-// import { getPosts } from "@/lib/api";　//api繋げるまで一旦コメントアウト
-// import { Post } from "@/types/article"; //api繋げるまで一旦コメントアウト
-//ログアウト処理
-// import { useRouter } from "next/navigation";
+import { getMyPosts, deletePost } from "./api-mypage";
+import { useRouter } from "next/navigation";
+import { Post } from "@/types/article";
 
-// 認証状態確認（仮）
-// ログイン成功時に保存された JWT(token) を確認
-// 今後ここで認証ガードを実装予定
 export default function MyPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const router = useRouter();
 
-  // ダミーデータ
-  // const [posts, setPosts] = useState([
-  //   {
-  //     id: 1,
-  //     url: "https://example.com",
-  //     memo: "Reactの勉強にめっちゃ良かった記事",
-  //     username: "tanaka",
-  //     created_at: "2024-01-01",
-  //   },
-  //   {
-  //     id: 2,
-  //     url: "https://nextjs.org",
-  //     memo: "Next.js公式ドキュメント",
-  //     username: "sato",
-  //     created_at: "2024-01-02",
-  //   },
-  // ]);
-
-  useEffect(() => {
-    const data = getPosts();
-    setPosts(data);
-  }, []);
-
-  const handleDelete = (id: number) => {
-    const newPosts = posts.filter((p) => p.id !== id);
-    savePosts(newPosts);
-    setPosts(newPosts);
+  // 投稿取得
+  const fetchPosts = async (token: string) => {
+    try {
+      const data = await getMyPosts(token);
+      setPosts(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // かみえりさんのコード↓
-  //ログアウト処理
-  // const router = useRouter();
-
-  // 一旦ダミーデータで表示のためコメントアウト
-  // const [posts, setPosts] = useState<Post[]>([]);
-  // const [posts, setPosts] = useState([
-  //   {
-  //     id: 1,
-  //     url: "https://example.com",
-  //     description: "Reactの勉強にめっちゃ良かった記事",
-  //     username: "tanaka",
-  //     created_at: "2024-01-01",
-  //   },
-  //   {
-  //     id: 2,
-  //     url: "https://nextjs.org",
-  //     description: "Next.js公式ドキュメント",
-  //     username: "sato",
-  //     created_at: "2024-01-02",
-  //   },
-  // ]);
-  // // ここまで↑
-
-  // 一旦ダミーデータで表示のためコメントアウト
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   console.log("token:", token);
-
-  //   if (!token) return;
-
-  //   console.log("fetch開始");
-
-  //   getPosts(token).then((data) => {
-  //     console.log("posts:", data);
-  //     setPosts(data);
-  //   });
-  // }, []);
-
-  //認証状態確認（仮）localStorage に保存された JWT(token) を取得して確認
-  // 今後は token が無い場合に /login へリダイレクトする認証ガードを実装予定
+  // 認証ガード
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("token:", token);
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    (async () => {
+      try {
+        const data = await getMyPosts(token);
+        setPosts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
   }, []);
 
-  //ログアウト処理
-  // localStorage から token を削除してログイン画面へ戻す
+  // 削除処理
+  const handleDelete = async (id: number) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+      await deletePost(id, token);
+
+      setPosts(posts.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("削除に失敗しました");
+    }
+  };
+
+  // ログアウト
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");

@@ -37,18 +37,16 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="p-6 space-y-6">
-    
+    <main className="p-6 bg-[#f0f9ff] min-h-screen"> {/* 全体の背景を薄い水色にするとミニオン風が際立ちます */}
+      
 
-      {/* 投稿一覧 */}
-      <section className="space-y-4">
+      {/* 修正ポイント：ここをグリッドにします */}
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
         {loading ? (
-          <p>データを読み込み中...</p>
+          <p className="col-span-full text-center text-gray-400">データを読み込み中...</p>
         ) : articles.length > 0 ? (
-          // 3. 配列の中身を一つずつ ArticleCard にして表示する
           articles.map((article) => {
-            // 日付の "T" より前だけを取り出す
             const dateOnly = article.created_at ? article.created_at.split("T")[0] : "不明";
 
             return (
@@ -62,7 +60,7 @@ export default function HomePage() {
             );
           })
         ) : (
-          <p>記事がまだありません。</p>
+          <p className="col-span-full text-center text-gray-400">記事がまだありません。</p>
         )}
 
       </section>
