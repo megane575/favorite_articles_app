@@ -64,7 +64,7 @@
 
 ---
 
-## 🗄 データベース設計（簡易）
+## 🗄 データベース設計
 
 ### users
 
@@ -77,23 +77,27 @@
 
 ### articles
 
-| カラム     | 型        | 説明         |
-| ---------- | --------- | ------------ |
-| id         | int       | 記事ID       |
-| user_id    | int       | 投稿者ID     |
-| url        | string    | 記事URL      |
-| memo 　    | string 　 | おすすめ理由 |
-| created_at | datetime  | 投稿日       |
+| カラム     | 型       | 説明           |
+| ---------- | -------- | -------------- |
+| id         | int      | 記事ID         |
+| user_id    | int      | 投稿者ID       |
+| url        | text     | 記事URL        |
+| memo 　    | text　   | お気に入り理由 |
+| created_at | datetime | 投稿日         |
 
 ---
 
 ## 🔌 API一覧
 
-- `POST /login`
-- `GET /articles`
-- `POST /articles`
-- `PUT /articles/{id}`
-- `DELETE /articles/{id}`
+| メソッド | エンドポイント   | 概要                        | 認証 |
+| :------- | :--------------- | --------------------------- | ---- |
+| GET      | /posts           | 記事一覧取得                | 不要 |
+| POST     | /posts           | 新規投稿                    | 必要 |
+| GET      | /posts/{post_id} | 特定記事1件取得（自分のみ） | 必要 |
+| PUT      | /posts/{post_id} | 投稿編集                    | 必要 |
+| DELETE   | /posts/{post_id} | 投稿削除                    | 必要 |
+| GET      | /my-posts        | 自分の投稿一覧取得          | 必要 |
+| POST     | /login           | ログイン（トークン取得）    | 不要 |
 
 ---
 
@@ -146,8 +150,8 @@
 
 #### Backend
 
+- 記事CRUD API実装
 - バグ修正
-- ログ整備
 
 #### Frontend
 
@@ -156,7 +160,7 @@
 
 #### 全員
 
-- 結合テスト
+- ドキュメント整理
 - 発表準備
 
 ---
@@ -165,5 +169,4 @@
 
 - DockerはDAY1で必ず完成させる
 - フロントはAPI完成を待たずUIを作る
-- 認証機能を最優先で実装する
-- DAY3は新機能を追加しない
+- GitHubでmergeしたらDiscordで各自プルリクするようメッセージを送る

@@ -5,60 +5,40 @@ Next.js を使用して UI を構築し、FastAPI のバックエンドと通信
 
 ---
 
-# 技術構成
-
-| 技術 | 用途 |
-|-----|-----|
-| Next.js | フロントエンドフレームワーク |
-| TypeScript | 型安全 |
-| TailwindCSS | UIスタイリング |
-| JWT | 認証 |
-| Fetch API | FastAPIとの通信 |
-
----
-
-# アプリ概要
-
-ユーザーがおすすめ記事を投稿・管理できるアプリです。
-
-主な機能
-
-- 記事一覧表示
-- ログイン
-- マイページ表示
-- 記事投稿
-- 記事編集
-- 記事削除
-
----
-
 # 画面構成
 
-| URL | 内容 |
-|----|----|
-| `/` | トップページ（記事一覧） |
-| `/login` | ログイン |
-| `/mypage` | 自分の投稿一覧 |
-| `/articles/new` | 記事投稿 |
-| `/articles/[id]/edit` | 記事編集 |
+| URL                | 内容                     |
+| ------------------ | ------------------------ |
+| `/`                | トップページ（記事一覧） |
+| `/login`           | ログイン                 |
+| `/my-posts`        | 自分の投稿一覧           |
+| `/posts`           | 記事投稿                 |
+| `/posts/{post_id}` | 記事編集                 |
 
 ---
 
 # ディレクトリ構成
 
-
-src/
-├ components/
-│ ├ common/ ← [A担当] ボタンやカードなどの共通パーツ
-│ └ features/ ← [B担当] 登録フォームや編集ロジック
-│
-├ app/ ← [A担当メイン] 画面のルーティング
-│ ├ login/ ← A担当
-│ ├ mypage/ ← B担当
-│ └ articles/ ← B担当（登録・編集）
-│
-└ types/ ← [B担当] API型定義
-
+.
+├── eslint.config.mjs
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│ ├── file.svg
+│ ├── globe.svg
+│ ├── next.svg
+│ ├── vercel.svg
+│ └── window.svg
+├── README.md
+├── src
+│ ├── app
+│ ├── components
+│ ├── lib
+│ └── types
+└── tsconfig.json
 
 ---
 
@@ -68,29 +48,21 @@ src/
 
 ログイン成功時
 
-
 POST /login
-
 
 FastAPIから返却される
 
-
 token
-
 
 をフロント側で保存します。
 
 保存先
 
-
 localStorage
-
 
 APIリクエスト時
 
-
 Authorization: Bearer token
-
 
 をヘッダーに付与します。
 
@@ -125,7 +97,6 @@ Authorization: Bearer token
 - 管理画面
 - CRUD機能
 - 型定義
-- テスト
 
 作業内容
 
@@ -142,36 +113,15 @@ Authorization: Bearer token
 
 依存関係インストール
 
-
 npm install
-
 
 開発サーバー起動
 
-
 npm run dev
-
 
 アクセス
 
-
 http://localhost:3000
-
-
----
-
-# バックエンド
-
-バックエンドは FastAPI で実装されています。
-
-使用技術
-
-- FastAPI
-- SQLAlchemy
-- MySQL
-- Docker
-
-フロントはAPI経由で通信します。
 
 ---
 
@@ -180,3 +130,5 @@ http://localhost:3000
 - UIの改善
 - エラーハンドリング強化
 - テスト追加
+- API関数をまとめて呼び出す
+- APIエンドポイントの環境変数の設定
